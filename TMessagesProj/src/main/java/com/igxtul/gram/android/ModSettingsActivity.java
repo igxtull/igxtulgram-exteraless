@@ -60,13 +60,25 @@ public final class ModSettingsActivity extends Activity {
         preview.setPadding(dp(16), dp(16), dp(16), dp(16));
         preview.setTag("igxtul:bg:bubble_out");
         preview.setBackgroundColor(Color.parseColor("#4A3AA8"));
+        preview.setTextColor(Color.WHITE);
         root.addView(fullWidth(preview, dp(12)));
 
         caption("Тема");
         List<String> names = new ArrayList<String>();
         for (Theme t : engine.presets().all()) { themeIds.add(t.id()); names.add(t.name() + " · " + t.author()); }
         themeSpinner = new Spinner(this);
-        themeSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, names));
+        themeSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, names) {
+            @Override public android.view.View getView(int pos, android.view.View conv, android.view.ViewGroup parent) {
+                android.view.View v = super.getView(pos, conv, parent);
+                if (v instanceof TextView) ((TextView) v).setTextColor(Color.WHITE);
+                return v;
+            }
+            @Override public android.view.View getDropDownView(int pos, android.view.View conv, android.view.ViewGroup parent) {
+                android.view.View v = super.getDropDownView(pos, conv, parent);
+                if (v instanceof TextView) ((TextView) v).setTextColor(Color.WHITE);
+                return v;
+            }
+        });
         String current = engine.theme().id();
         int selected = themeIds.indexOf(current);
         themeSpinner.setSelection(selected < 0 ? 0 : selected);
@@ -86,8 +98,10 @@ public final class ModSettingsActivity extends Activity {
         accentInput = new EditText(this);
         accentInput.setText(ColorUtil.toHex(engine.effective().color(ModConfig.K_ACCENT, 0)));
         accentInput.setSingleLine(true);
+        accentInput.setTextColor(Color.WHITE);
         Button applyColor = new Button(this);
         applyColor.setText("OK");
+        applyColor.setTextColor(Color.WHITE);
         applyColor.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 int parsed = ColorUtil.parse(accentInput.getText().toString(), -1);
@@ -120,6 +134,7 @@ public final class ModSettingsActivity extends Activity {
         jsonInput.setText(engine.exportSettings());
         jsonInput.setMinLines(3);
         jsonInput.setSingleLine(false);
+        jsonInput.setTextColor(Color.WHITE);
         root.addView(jsonInput);
         LinearLayout io = row();
         button(io, "Экспорт", new View.OnClickListener() {
@@ -175,7 +190,9 @@ public final class ModSettingsActivity extends Activity {
     private void seek(final String label, final String key, final int min, final int max, float def, final boolean floatValue) {
         TextView v = new TextView(this);
         v.setText(label);
+        v.setTextColor(Color.WHITE);
         final TextView value = new TextView(this);
+        value.setTextColor(Color.WHITE);
         float current = engine.effective().flt(key, def);
         value.setText(String.valueOf(Math.round(current)));
         SeekBar bar = new SeekBar(this);
@@ -201,6 +218,7 @@ public final class ModSettingsActivity extends Activity {
     private void toggle(String label, final String key, boolean def) {
         Switch s = new Switch(this);
         s.setText(label);
+        s.setTextColor(Color.WHITE);
         s.setChecked(engine.effective().bool(key, def));
         s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton b, boolean checked) {
@@ -213,6 +231,7 @@ public final class ModSettingsActivity extends Activity {
     private void featureToggle(final Feature f) {
         Switch s = new Switch(this);
         s.setText(f.displayName());
+        s.setTextColor(Color.WHITE);
         s.setChecked(engine.isFeatureEnabled(f));
         s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override public void onCheckedChanged(CompoundButton b, boolean checked) {
@@ -225,6 +244,7 @@ public final class ModSettingsActivity extends Activity {
     private void button(LinearLayout parent, String text, View.OnClickListener listener) {
         Button b = new Button(this);
         b.setText(text);
+        b.setTextColor(Color.WHITE);
         b.setOnClickListener(listener);
         parent.addView(weight(b, 1));
     }
