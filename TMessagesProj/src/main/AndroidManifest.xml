@@ -1009,6 +1009,11 @@
 
         <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="false" />
 
+        <activity
+            android:name="com.igxtul.gram.android.ModSettingsActivity"
+            android:label="igxtulGram"
+            android:exported="true"
+            android:theme="@style/Theme.TMessages" />
     </application>
 
 </manifest>
