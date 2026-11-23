@@ -7,7 +7,7 @@ on:
     paths-ignore:
       - '**.md'
       - '.github/**'
-      - '!.github/workflows/canary.yml'
+      - '!.github/workflows/build-igxtulgram.yml'
   workflow_dispatch:
     inputs:
       upload:
