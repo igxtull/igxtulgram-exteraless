@@ -288,6 +288,32 @@ import xyz.nextalone.nagram.NaConfig;
 import tw.nekomimi.nekogram.ui.icons.IconsResources;
 
 public class LaunchActivity extends BasePermissionsActivity implements INavigationLayout.INavigationLayoutDelegate, NotificationCenter.NotificationCenterDelegate, DialogsActivity.DialogsActivityDelegate {
+
+    // igxtulGram: перехват тапа по iGX до view-дерева (иначе его забирает кнопка темы).
+    @Override
+    public boolean dispatchTouchEvent(android.view.MotionEvent ev) {
+        try {
+            if (igxButton != null && igxButton.getVisibility() == android.view.View.VISIBLE
+                    && ev.getActionMasked() == android.view.MotionEvent.ACTION_UP) {
+                int[] loc = new int[2];
+                igxButton.getLocationOnScreen(loc);
+                float x = ev.getRawX();
+                float y = ev.getRawY();
+                int pad = 10;
+                if (x >= loc[0] - pad && x <= loc[0] + igxButton.getWidth() + pad
+                        && y >= loc[1] - pad && y <= loc[1] + igxButton.getHeight() + pad) {
+                    try {
+                        com.igxtul.gram.android.IgxtulGram.openSettings(this);
+                    } catch (Throwable err) {
+                        android.widget.Toast.makeText(this, "iGX: " + err, android.widget.Toast.LENGTH_LONG).show();
+                    }
+                    return true;
+                }
+            }
+        } catch (Throwable ignore) {
+        }
+        return super.dispatchTouchEvent(ev);
+    }
     public final static String EXTRA_FORCE_NOT_INTERNAL_APPS = "force_not_internal_apps";
     public final static String EXTRA_VOIP_ANSWER_TOKEN = "voip_answer_token";
     // only our own call notifications know it, so other apps can't answer calls via the exported activity
@@ -340,6 +366,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
     private FrameLayout shadowTablet;
     private SizeNotifierFrameLayout backgroundTablet;
     public FrameLayout frameLayout;
+    private android.widget.TextView igxButton; // igxtulGram
     private FireworksOverlay fireworksOverlay;
     private BottomSheetTabsOverlay bottomSheetTabsOverlay;
     public DrawerLayoutContainer drawerLayoutContainer;
@@ -490,6 +517,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         flagSecureReason.attach();
 
         super.onCreate(savedInstanceState);
+        com.igxtul.gram.android.IgxtulGram.init(getApplicationContext(), new com.igxtul.gram.android.AndroidTarget(this));
         app.exteraless.general.GeneralHelper.applyContentCapture(this);
         if (Build.VERSION.SDK_INT >= 24) {
             AndroidUtilities.isInMultiwindow = isInMultiWindowMode();
@@ -506,6 +534,31 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
         frameLayout.setClipToPadding(false);
         frameLayout.setClipChildren(false);
         setContentView(frameLayout);
+        com.igxtul.gram.android.IgxtulGram.setRoot(frameLayout);
+        igxButton = new android.widget.TextView(this);
+        igxButton.setText("iGX");
+        igxButton.setTextColor(android.graphics.Color.WHITE);
+        igxButton.setBackgroundColor(0xCC7B5CFF);
+        igxButton.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, 12);
+        igxButton.setGravity(android.view.Gravity.CENTER);
+        int igxPad = (int) android.util.TypedValue.applyDimension(android.util.TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
+        igxButton.setPadding(igxPad, igxPad / 2, igxPad, igxPad / 2);
+        android.widget.FrameLayout.LayoutParams igxParams = new android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.WRAP_CONTENT, android.widget.FrameLayout.LayoutParams.WRAP_CONTENT);
+        igxParams.gravity = android.view.Gravity.TOP | android.view.Gravity.END;
+        igxParams.topMargin = igxPad * 7;
+        igxParams.rightMargin = igxPad;
+        igxButton.setLayoutParams(igxParams);
+        igxButton.setZ(10000f);
+        igxButton.setClickable(true);
+        igxButton.setFocusable(true);
+        igxButton.bringToFront();
+        igxButton.setOnClickListener(new android.view.View.OnClickListener() {
+            @Override public void onClick(android.view.View v) {
+                com.igxtul.gram.android.IgxtulGram.openSettings(LaunchActivity.this);
+            }
+        });
+        frameLayout.addView(igxButton);
         rootAnimatedInsetsListener = new WindowAnimatedInsetsProvider(frameLayout);
         PipCoordinator.getInstance().onActivityCreate(this, createActivityVisibilityController(false));
 
