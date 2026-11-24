@@ -882,6 +882,8 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
         // Как в exteraGram 12.9.0 (SettingsActivity.java:899): знак приложения вместо
         // шестерёнки, акцент фирменного цвета на обе точки градиента.
         items.add(SettingCell.Factory.of(-1, 0xFF993C38, 0xFF993C38, R.drawable.exteraless_icon_tile, getString(R.string.OpenExteraPreferences), getString(R.string.OpenExteraInfo)));
+        // igxtulGram: отдельная плашка в настройках Telegram
+        items.add(SettingCell.Factory.of(9999, 0xFF7B5CFF, 0xFF5133C4, R.drawable.msg_theme, "igxtulGram", "\u041a\u0430\u0441\u0442\u043e\u043c\u0438\u0437\u0430\u0446\u0438\u044f \u00b7 by igxtul"));
         items.add(UItem.asShadow(null));
         final boolean walletAbove = getConnectionsManager().getCurrentTime() - 1791538462 < 4 * 7 * 24 * 60 * 60;
         if (walletAbove && getMessagesController().config.walletAvailable.get()) {
@@ -1108,6 +1110,10 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
             }
             case -1: {
                 presentFragment(new OpenExteraSettingsActivity());
+                break;
+            }
+            case 9999: {
+                getParentActivity().startActivity(new android.content.Intent(getParentActivity(), com.igxtul.gram.android.ModSettingsActivity.class));
                 break;
             }
             case 26: {
