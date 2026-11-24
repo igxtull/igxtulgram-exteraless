@@ -31,6 +31,7 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
     private static final int TYPE_ABOUT = 100;
 
     private int aboutRow;
+    private int igxtulRow;
 
     private int categoriesHeaderRow;
     private int generalRow;
@@ -55,6 +56,7 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
         super.updateRows();
 
         aboutRow = addRow("about");
+        igxtulRow = addRow("igxtul");
 
         categoriesHeaderRow = addRow("categoriesHeader");
         generalRow = addRow("general");
@@ -180,7 +182,9 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
 
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
-        if (position == generalRow) {
+        if (position == igxtulRow) {
+            getParentActivity().startActivity(new android.content.Intent(getParentActivity(), com.igxtul.gram.android.ModSettingsActivity.class));
+        } else if (position == generalRow) {
             presentFragment(new OpenExteraGeneralActivity());
         } else if (position == appearanceRow) {
             presentFragment(new OpenExteraAppearanceActivity());
@@ -238,7 +242,9 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
                 }
                 case TYPE_TEXT: {
                     TextCell cell = (TextCell) holder.itemView;
-                    if (position == generalRow) {
+                    if (position == igxtulRow) {
+                        cell.setTextAndIcon("igxtulGram", R.drawable.msg_theme, true);
+                    } else if (position == generalRow) {
                         cell.setTextAndIcon(getString(R.string.OpenExteraGeneral), R.drawable.msg_media, true);
                     } else if (position == appearanceRow) {
                         cell.setTextAndIcon(getString(R.string.OpenExteraAppearance), R.drawable.msg_theme, true);
