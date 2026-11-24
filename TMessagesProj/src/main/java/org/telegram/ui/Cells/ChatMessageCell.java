@@ -19959,7 +19959,7 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
                 currentBackgroundDrawable = (MessageDrawable) getThemedDrawable(selected ? Theme.key_drawable_msgInMediaSelected : Theme.key_drawable_msgInMedia);
             }
         }
-        com.igxtul.gram.android.IgxtulGram.tintBubble(currentBackgroundDrawable, currentMessageObject != null && currentMessageObject.isOutOwner());
+        com.igxtul.gram.android.IgxtulPrefs.applyBubble(currentBackgroundDrawable, currentMessageObject != null && currentMessageObject.isOutOwner());
 
         int w = parentWidth;
         int h = parentHeight;
