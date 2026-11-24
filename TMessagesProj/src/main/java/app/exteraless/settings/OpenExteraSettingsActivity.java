@@ -183,7 +183,7 @@ public class OpenExteraSettingsActivity extends BaseNekoSettingsActivity {
     @Override
     protected void onItemClick(View view, int position, float x, float y) {
         if (position == igxtulRow) {
-            getParentActivity().startActivity(new android.content.Intent(getParentActivity(), com.igxtul.gram.android.ModSettingsActivity.class));
+            presentFragment(new com.igxtul.gram.android.IgxtulSettingsActivity());
         } else if (position == generalRow) {
             presentFragment(new OpenExteraGeneralActivity());
         } else if (position == appearanceRow) {
