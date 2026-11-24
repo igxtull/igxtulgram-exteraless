@@ -30,6 +30,14 @@ public final class IgxtulGram {
     public static CustomizationEngine get() { return engine; }
 
     public static void openSettings(Context context) {
+        // Нормальный Telegram-экран внутри навигации приложения.
+        try {
+            if (context instanceof org.telegram.ui.LaunchActivity) {
+                ((org.telegram.ui.LaunchActivity) context).presentFragment(new IgxtulSettingsActivity());
+                return;
+            }
+        } catch (Throwable ignored) {
+        }
         context.startActivity(new Intent(context, ModSettingsActivity.class));
     }
 
