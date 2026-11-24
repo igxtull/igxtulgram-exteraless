@@ -1113,7 +1113,7 @@ public class SettingsActivity extends BaseFragment implements NotificationCenter
                 break;
             }
             case 9999: {
-                getParentActivity().startActivity(new android.content.Intent(getParentActivity(), com.igxtul.gram.android.ModSettingsActivity.class));
+                presentFragment(new com.igxtul.gram.android.IgxtulSettingsActivity());
                 break;
             }
             case 26: {
